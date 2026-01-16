@@ -16,6 +16,14 @@ export class IamRoleStack extends cdk.Stack {
       description: 'Lambda execution role with admin permissions',
     });
 
+    // Add inline policy to deny all S3 actions for security compliance
+    this.role.addToPolicy(new iam.PolicyStatement({
+      sid: 'DenyAllS3Access',
+      effect: iam.Effect.DENY,
+      actions: ['s3:*'],
+      resources: ['*'],
+    }));
+
     new cdk.CfnOutput(this, 'RoleArn', {
       value: this.role.roleArn,
       description: 'ARN of the Lambda admin role',
