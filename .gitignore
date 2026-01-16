@@ -138,6 +138,12 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
+# CDK
+cdk.out/
+*.js
+!jest.config.js
+*.d.ts
+
 # Kiro IDE files
 .kiro/
 
