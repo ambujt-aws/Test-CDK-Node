@@ -10,15 +10,30 @@ export class IamRoleStack extends cdk.Stack {
 
     this.role = new iam.Role(this, 'LambdaAdminRole', {
       assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
-      managedPolicies: [
-        iam.ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess'),
-      ],
-      description: 'Lambda execution role with admin permissions',
+      description: 'Lambda execution role with S3 permissions explicitly denied',
     });
+
+    // Add basic Lambda execution permissions (CloudWatch Logs)
+    this.role.addManagedPolicy(
+      iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')
+    );
+
+    // Add explicit deny policy for all S3 actions
+    const s3DenyPolicy = new iam.Policy(this, 'S3DenyPolicy', {
+      statements: [
+        new iam.PolicyStatement({
+          effect: iam.Effect.DENY,
+          actions: ['s3:*'],
+          resources: ['*'],
+        }),
+      ],
+    });
+
+    this.role.attachInlinePolicy(s3DenyPolicy);
 
     new cdk.CfnOutput(this, 'RoleArn', {
       value: this.role.roleArn,
-      description: 'ARN of the Lambda admin role',
+      description: 'ARN of the Lambda role with S3 permissions denied',
     });
   }
 }
