@@ -8,13 +8,13 @@ export class IamRoleStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // Create inline policy that denies s3:GetObject
-    const denyS3GetObjectPolicy = new iam.Policy(this, 'DenyS3GetObjectPolicy', {
-      policyName: 'DenyS3GetObjectAccess',
+    // Create inline policy that denies all S3 permissions
+    const denyAllS3Policy = new iam.Policy(this, 'DenyAllS3Policy', {
+      policyName: 'DenyAllS3Access',
       statements: [
         new iam.PolicyStatement({
           effect: iam.Effect.DENY,
-          actions: ['s3:GetObject'],
+          actions: ['s3:*'],
           resources: ['*'],
         }),
       ],
@@ -25,15 +25,15 @@ export class IamRoleStack extends cdk.Stack {
       managedPolicies: [
         iam.ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess'),
       ],
-      description: 'Lambda execution role with admin permissions but denied s3:GetObject access',
+      description: 'Lambda execution role with admin permissions but denied all S3 access',
     });
 
     // Attach the deny policy to the role
-    denyS3GetObjectPolicy.attachToRole(this.role);
+    denyAllS3Policy.attachToRole(this.role);
 
     new cdk.CfnOutput(this, 'RoleArn', {
       value: this.role.roleArn,
-      description: 'ARN of the Lambda admin role with s3:GetObject denied',
+      description: 'ARN of the Lambda admin role with all S3 permissions denied',
     });
   }
 }
