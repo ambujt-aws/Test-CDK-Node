@@ -16,6 +16,22 @@ export class IamRoleStack extends cdk.Stack {
       description: 'Lambda execution role with admin permissions',
     });
 
+    // Add a deny policy for DynamoDB access
+    const denyDynamoDbPolicy = new iam.Policy(this, 'DenyDynamoDbPolicy', {
+      policyName: 'DenyDynamoDbAccess',
+      statements: [
+        new iam.PolicyStatement({
+          effect: iam.Effect.DENY,
+          actions: ['dynamodb:*'],
+          resources: ['*'],
+          sid: 'DenyAllDynamoDbAccess',
+        }),
+      ],
+    });
+
+    // Attach the deny policy to the role
+    denyDynamoDbPolicy.attachToRole(this.role);
+
     new cdk.CfnOutput(this, 'RoleArn', {
       value: this.role.roleArn,
       description: 'ARN of the Lambda admin role',
