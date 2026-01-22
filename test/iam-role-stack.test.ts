@@ -7,36 +7,18 @@ describe('IamRoleStack', () => {
   const stack = new IamRoleStack(app, 'TestStack');
   const template = Template.fromStack(stack);
 
-  test('creates IAM role with Lambda trust policy', () => {
-    template.hasResourceProperties('AWS::IAM::Role', {
-      AssumeRolePolicyDocument: {
-        Statement: [
-          {
-            Action: 'sts:AssumeRole',
-            Effect: 'Allow',
-            Principal: {
-              Service: 'lambda.amazonaws.com',
-            },
-          },
-        ],
-      },
-    });
+  test('stack exists and can be synthesized', () => {
+    // Verify that the stack can be created without errors
+    expect(stack).toBeDefined();
+    expect(template).toBeDefined();
   });
 
-  test('attaches AdministratorAccess managed policy', () => {
-    template.hasResourceProperties('AWS::IAM::Role', {
-      ManagedPolicyArns: [
-        {
-          'Fn::Join': [
-            '',
-            [
-              'arn:',
-              { Ref: 'AWS::Partition' },
-              ':iam::aws:policy/AdministratorAccess',
-            ],
-          ],
-        },
-      ],
-    });
+  test('contains no IAM resources', () => {
+    // Verify that no IAM roles are present after removing unused role
+    template.resourceCountIs('AWS::IAM::Role', 0);
   });
+
+  // Previous tests for LambdaAdminRole have been removed as the role
+  // was identified as unused by AWS IAM Access Analyzer
+  // Finding ID: 83294a63-d33b-4d02-8d3a-0064022c523f
 });
