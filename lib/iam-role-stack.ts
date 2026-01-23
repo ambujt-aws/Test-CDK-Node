@@ -1,24 +1,14 @@
 import * as cdk from 'aws-cdk-lib';
-import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 
 export class IamRoleStack extends cdk.Stack {
-  public readonly role: iam.Role;
-
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    this.role = new iam.Role(this, 'LambdaAdminRole', {
-      assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
-      managedPolicies: [
-        iam.ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess'),
-      ],
-      description: 'Lambda execution role with admin permissions',
-    });
-
-    new cdk.CfnOutput(this, 'RoleArn', {
-      value: this.role.roleArn,
-      description: 'ARN of the Lambda admin role',
-    });
+    // Previously contained LambdaAdminRole (ID: LambdaAdminRole635E17BF)
+    // Removed due to AWS IAM Access Analyzer finding: UnusedIAMRole
+    // Finding ID: 83294a63-d33b-4d02-8d3a-0064022c523f
+    
+    // Stack kept as placeholder for future IAM resources if needed
   }
 }
