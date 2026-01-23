@@ -6,5 +6,5 @@ import { IamRoleStack } from '../lib/iam-role-stack';
 const app = new cdk.App();
 
 new IamRoleStack(app, 'IamRoleStack', {
-  description: 'Stack containing Lambda execution role with admin permissions',
+  description: 'IAM role stack - unused resources removed based on Access Analyzer findings',
 });
