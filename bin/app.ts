@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { IamRoleStack } from '../lib/iam-role-stack';
 
 const app = new cdk.App();
 
-new IamRoleStack(app, 'IamRoleStack', {
-  description: 'Stack containing Lambda execution role with admin permissions',
-});
+// The IamRoleStack containing LambdaAdminRole has been removed
+// as the role was identified as unused by AWS IAM Access Analyzer.
+// Add new stacks here as needed.
