@@ -5,6 +5,7 @@ import { IamRoleStack } from '../lib/iam-role-stack';
 
 const app = new cdk.App();
 
+// Stack instantiation preserved but the unused LambdaAdminRole has been removed
 new IamRoleStack(app, 'IamRoleStack', {
-  description: 'Stack containing Lambda execution role with admin permissions',
+  description: 'Stack for IAM resources (unused LambdaAdminRole removed)',
 });
